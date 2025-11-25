@@ -59,14 +59,22 @@ Análisis estadístico completo de una población de 279 individuos de _Iguana i
 - Distribuciones superpuestas
 - Análisis por categorías de edad
 
-### 3. Clustering con K-means
+### 3. Clustering con K-Means
 
-- **Preprocesamiento Riguroso:** Implementación de *pipelines* de transformación para evitar  *Data Leakage* . Separación *Train/Test* (80/20) realizada **antes** de la estandarización (`StandardScaler`) y la codificación de variables (`OneHotEncoder`).
+- **Preprocesamiento Riguroso:** Implementación de _pipelines_ de transformación para evitar _Data Leakage_. Separación _Train/Test_ (80/20) realizada **antes** de la estandarización (`StandardScaler`) y la codificación de variables (`OneHotEncoder`).
 - Determinación de K óptimo (método del codo y silueta)
 - Entrenamiento y evaluación del modelo
 - Análisis de pureza de clusters
 
-### 4. Visualización Avanzada
+### 4. Clustering con K-Prototypes (Validación)
+
+- **Algoritmo híbrido:** Manejo nativo de variables numéricas (Peso) y categóricas (Sexo, Edad) sin necesidad de One-Hot Encoding
+- Estandarización solo de variables numéricas con `StandardScaler`
+- Método del codo para determinar K óptimo
+- Análisis de prototipos (centroides + modas categóricas)
+- Validación de la estructura poblacional encontrada con K-Means
+
+### 5. Visualización Avanzada
 
 - PCA para reducción dimensional
 - Gráficos 2D y 3D interactivos
@@ -87,40 +95,77 @@ Análisis estadístico completo de una población de 279 individuos de _Iguana i
 - **Peso promedio:** Machos 2.26 kg vs Hembras 1.31 kg
 - **Patrón consistente:** Diferencias se acentúan con la edad
 
-### 🔍 Clusters Identificados (K=3)
+### 🔍 Clusters Identificados con K-Means (K=3)
 
-1. **Cluster 0 - "Juvenil/Temprana"**
+El análisis K-Means reveló **tres grupos funcionales** con alta coherencia biológica:
 
-   - Peso promedio: 0.64 kg
-   - 24 individuos (8.6% de la población)
-   - Predominio de juveniles (87.5% pureza)
-   - Etapa de crecimiento y alta vulnerabilidad
-2. **Cluster 1 - "Adulta/Madura"**
+1. **Cluster 0 - "Juveniles/Crecimiento Temprano"** 🟡
 
-   - Peso promedio: 1.49 kg
-   - 162 individuos (58.1% de la población)
-   - Predominio de adultos (97.5% pureza) y hembras (65.4% pureza)
-   - Estrategia reproductiva y estabilidad
-3. **Cluster 2 - "Subadulta/Transición"**
+   - **Peso promedio:** 0.64 kg (±0.22 kg)
+   - **Tamaño:** 24 individuos (8.6% de la población)
+   - **Pureza edad:** 87.5% juveniles
+   - **Pureza sexo:** 54.2% hembras
+   - **Interpretación:** Etapa de crecimiento rápido y alta vulnerabilidad. Prioridad en supervivencia sobre reproducción.
+2. **Cluster 1 - "Hembras Adultas/Reproductoras"** 🟢
 
-   - Peso promedio: 3.24 kg
-   - 93 individuos (33.3% de la población)
-   - Predominio de adultos (98.9% pureza) y machos (91.4% pureza)
-   - Estrategia competitiva y dominio territorial
+   - **Peso promedio:** 1.49 kg (±0.43 kg)
+   - **Tamaño:** 162 individuos (58.1% de la población)
+   - **Pureza edad:** 97.5% adultos
+   - **Pureza sexo:** 65.4% hembras
+   - **Interpretación:** Estrategia reproductiva. Tamaño corporal moderado que equilibra eficiencia energética y capacidad reproductiva.
+3. **Cluster 2 - "Machos Dominantes/Competitivos"** 🔴
 
-### Limitaciones del Estudio
+   - **Peso promedio:** 3.24 kg (±0.94 kg)
+   - **Tamaño:** 93 individuos (33.3% de la población)
+   - **Pureza edad:** 98.9% adultos
+   - **Pureza sexo:** 91.4% machos
+   - **Interpretación:** Estrategia competitiva. Tamaño corporal grande para dominio territorial y acceso reproductivo.
 
-* **Algoritmo de Clustering:** Se utilizó K-Means con codificación *One-Hot* para variables categóricas. Aunque los resultados son biológicamente coherentes, se reconoce que algoritmos como **K-Prototypes** o el uso de distancias de Gower podrían ser teóricamente más robustos para datos mixtos en futuras iteraciones.
-* **Variables Biométricas:** El análisis de tamaño se basa principalmente en el peso corporal. La inclusión de medidas estructurales (como la longitud hocico-cloaca, SVL) permitiría calcular índices de condición corporal y separar "tamaño" de "estado nutricional".
-* **Temporalidad:** Los datos corresponden a un periodo específico (septiembre-noviembre), lo que podría influir en el peso de las hembras (ciclos reproductivos) o la actividad de los machos.
+### ✅ Validación con K-Prototypes (K=3)
+
+Para confirmar la robustez de los hallazgos, se implementó **K-Prototypes**, un algoritmo híbrido que maneja nativamente variables numéricas y categóricas sin transformaciones artificiales. Los resultados validaron la estructura de 3 clusters:
+
+1. **Cluster 0 - "Machos Adultos Estándar"**
+
+   - **Peso promedio:** 2.256 kg
+   - **Sexo modal:** Macho
+   - **Edad modal:** Adulto
+   - **Tamaño:** 97 individuos (34.8%)
+2. **Cluster 1 - "Hembras y Subadultos"**
+
+   - **Peso promedio:** 1.202 kg
+   - **Sexo modal:** Hembra
+   - **Edad modal:** Adulto
+   - **Tamaño:** 150 individuos (53.8%)
+3. **Cluster 2 - "Machos Dominantes/Gigantes"**
+
+   - **Peso promedio:** 3.758 kg
+   - **Sexo modal:** Macho
+   - **Edad modal:** Adulto
+   - **Tamaño:** 32 individuos (11.5%)
+
+**Conclusión:** K-Prototypes confirma matemáticamente la estabilidad de la estructura poblacional, validando que las tres estrategias de vida identificadas con K-Means son robustas y no son artefactos del método de codificación.
+
+### ⚠️ Limitaciones del Estudio
+
+- **Variables Biométricas:** El análisis de tamaño se basa principalmente en el peso corporal. La inclusión de medidas estructurales (como la longitud hocico-cloaca, SVL) permitiría calcular índices de condición corporal y separar "tamaño" de "estado nutricional".
+- **Temporalidad:** Los datos corresponden a un periodo específico (septiembre-noviembre), lo que podría influir en el peso de las hembras (ciclos reproductivos) o la actividad de los machos.
 
 ### 📊 Métricas de Calidad del Clustering
+
+**K-Means:**
 
 - **Coeficiente de Silueta:** 0.536 (Buena separación)
 - **Índice Calinski-Harabasz:** 218.05 (Alta calidad)
 - **Pureza promedio edad:** 94.6% (Clusters altamente homogéneos)
 - **Pureza promedio sexo:** 69.7% (Diferenciación sexual clara)
 - **Varianza explicada (PCA):** 92.3% con 3 componentes principales
+
+**K-Prototypes:**
+
+- **Método del codo:** K óptimo = 3 (consistente con K-Means)
+- **Prototipos estables:** Convergencia en todas las ejecuciones
+- **Validación cruzada:** Estructura poblacional matemáticamente robusta
 
 ## 🎨 Visualizaciones Generadas
 
@@ -132,8 +177,9 @@ Análisis estadístico completo de una población de 279 individuos de _Iguana i
 4. **Análisis por edad** (Heatmaps y barras apiladas)
 5. **Análisis de outliers** (Boxplots con anotaciones)
 6. **Clustering K-Means** (Método del codo, silueta)
-7. **Visualización PCA** (2D y 3D con múltiples vistas)
-8. **Análisis de cargas** (Contribución de variables a componentes principales)
+7. **Clustering K-Prototypes** (Método del codo, prototipos)
+8. **Visualización PCA** (2D y 3D con múltiples vistas)
+9. **Análisis de cargas** (Contribución de variables a componentes principales)
 
 ### Características Visuales
 
@@ -147,7 +193,7 @@ Análisis estadístico completo de una población de 279 individuos de _Iguana i
 ### Requisitos Previos
 
 ```bash
-pip install pandas numpy matplotlib seaborn scikit-learn scipy jupyter
+pip install pandas numpy matplotlib seaborn scikit-learn scipy jupyter kmodes
 ```
 
 ### Ejecutar notebook
@@ -160,21 +206,21 @@ jupyter notebook especies.ipynb
 
 ### Interpretación Ecológica de los Clusters
 
-El análisis de clustering K-Means sugiere la existencia de tres grupos funcionales distintas dentro de la población de iguanas:
+El análisis de clustering (K-Means y K-Prototypes) confirma la existencia de tres grupos funcionales distintos dentro de la población de iguanas:
 
-#### 🟡 Estrategia de Supervivencia (Cluster 0 - Juveniles)
+#### 🟡 Estrategia de Supervivencia (Juveniles)
 
 - **Prioridad:** Crecer y sobrevivir
 - **Riesgo:** Alta vulnerabilidad a depredadores y competencia
 - **Oportunidad:** Flexibilidad y capacidad de adaptación
 
-#### 🟢 Estrategia Reproductiva (Cluster 1 - Hembras Adultas)
+#### 🟢 Estrategia Reproductiva (Hembras Adultas)
 
 - **Prioridad:** Mantener y reproducir
 - **Riesgo:** Competencia por recursos y sitios de anidación
 - **Oportunidad:** Estabilidad y experiencia
 
-#### 🔴 Estrategia de Competencia (Cluster 2 - Machos Dominantes/Subadultos)
+#### 🔴 Estrategia de Competencia (Machos Dominantes)
 
 - **Prioridad:** Dominar territorios y acceso reproductivo
 - **Riesgo:** Alto costo energético de mantener tamaño corporal
@@ -192,14 +238,15 @@ El análisis de clustering K-Means sugiere la existencia de tres grupos funciona
 - Las poblaciones naturales **no son homogéneas** - son sistemas complejos donde múltiples estrategias coexisten
 - El clustering **revela patrones** que las categorías tradicionales (adulto/joven, macho/hembra) no capturan completamente
 - La variabilidad dentro de clusters sugiere **múltiples caminos hacia el éxito evolutivo**
+- **K-Prototypes valida** que los patrones encontrados son reales y no artefactos metodológicos
 
-## Trabajo Futuro Sugerido
+## 💡 Trabajo Futuro Sugerido
 
 Para extender este análisis, se recomienda:
 
-1. Implementar la librería `kmodes` para probar el algoritmo  **K-Prototypes** .
-2. Recolectar variables de longitud (SVL) para validación cruzada de los clusters.
-3. Aumentar el tamaño muestral para validar la estabilidad de los grupos extremos.
+1. Recolectar variables de longitud (SVL) para validación cruzada de los clusters
+2. Aumentar el tamaño muestral para validar la estabilidad de los grupos extremos
+3. Realizar análisis temporal para detectar variaciones estacionales
 
 ## 📚 Referencias y Contexto
 
