@@ -2,7 +2,7 @@
 
 ## 📋 Descripción del Proyecto
 
-Análisis estadístico completo de una población de 279 individuos de *Iguana iguana* colectados en el área urbana de Cartagena de Indias, Colombia. Este proyecto combina técnicas de estadística descriptiva, visualización de datos y machine learning para revelar patrones demográficos, dimorfismo sexual y estructura poblacional en un contexto urbano único.
+Análisis estadístico completo de una población de 279 individuos de _Iguana iguana_ colectados en el área urbana de Cartagena de Indias, Colombia. Este proyecto combina técnicas de estadística descriptiva, visualización de datos y machine learning para revelar patrones demográficos, dimorfismo sexual y estructura poblacional en un contexto urbano único.
 
 ## 🎯 Objetivos
 
@@ -40,8 +40,8 @@ Análisis estadístico completo de una población de 279 individuos de *Iguana i
 ### Estadísticas Clave
 
 - **Total de individuos:** 279
-- **Proporción de sexos:** 62.7% Machos, 37.3% Hembras
-- **Distribución por edad:** 77.4% Adultos, 18.3% Subadultos, 4.3% Juveniles
+- **Proporción de sexos:** 58.1% Machos, 41.9% Hembras (Ratio 1.4:1)
+- **Distribución por edad:** 72.8% Adultos, 18.6% Subadultos, 8.6% Juveniles
 - **Rango de pesos:** 0.235 kg - 6.5 kg
 - **Peso promedio:** 1.95 kg (±0.89 kg)
 
@@ -61,7 +61,7 @@ Análisis estadístico completo de una población de 279 individuos de *Iguana i
 
 ### 3. Clustering con K-means
 
-- Preparación de datos con one-hot encoding
+- **Preprocesamiento Riguroso:** Implementación de *pipelines* de transformación para evitar  *Data Leakage* . Separación *Train/Test* (80/20) realizada **antes** de la estandarización (`StandardScaler`) y la codificación de variables (`OneHotEncoder`).
 - Determinación de K óptimo (método del codo y silueta)
 - Entrenamiento y evaluación del modelo
 - Análisis de pureza de clusters
@@ -77,39 +77,50 @@ Análisis estadístico completo de una población de 279 individuos de *Iguana i
 
 ### 🎯 Estructura Poblacional
 
-- **Dominancia masculina:** 1.7 machos por cada hembra
-- **Población madura:** 77.4% de individuos adultos
+- **Dominancia masculina:** 1.4 machos por cada hembra
+- **Población madura:** 72.8% de individuos adultos
 - **Alta variabilidad biométrica:** Coeficiente de variación del 45.6%
 
 ### ⚖️ Dimorfismo Sexual
 
-- **Diferencia significativa:** Machos 53% más pesados que hembras
-- **Peso promedio:** Machos 2.45 kg vs Hembras 1.59 kg
+- **Diferencia significativa:** Machos 72.5% más pesados que hembras
+- **Peso promedio:** Machos 2.26 kg vs Hembras 1.31 kg
 - **Patrón consistente:** Diferencias se acentúan con la edad
 
 ### 🔍 Clusters Identificados (K=3)
 
-1. **Cluster 0 - "Jóvenes Exploradores"**
+1. **Cluster 0 - "Juvenil/Temprana"**
 
-   - Peso promedio: 1.2 kg
-   - Mezcla de juveniles y subadultos
-   - Etapa de crecimiento y aprendizaje
-2. **Cluster 1 - "Matriarcas Establecidas"**
+   - Peso promedio: 0.64 kg
+   - 24 individuos (8.6% de la población)
+   - Predominio de juveniles (87.5% pureza)
+   - Etapa de crecimiento y alta vulnerabilidad
+2. **Cluster 1 - "Adulta/Madura"**
 
-   - Peso promedio: 1.6 kg
-   - Predominio de hembras adultas
-   - Estrategia reproductiva
-3. **Cluster 2 - "Gigantes Competidores"**
+   - Peso promedio: 1.49 kg
+   - 162 individuos (58.1% de la población)
+   - Predominio de adultos (97.5% pureza) y hembras (65.4% pureza)
+   - Estrategia reproductiva y estabilidad
+3. **Cluster 2 - "Subadulta/Transición"**
 
-   - Peso promedio: 2.8 kg
-   - Machos adultos dominantes
-   - Estrategia competitiva
+   - Peso promedio: 3.24 kg
+   - 93 individuos (33.3% de la población)
+   - Predominio de adultos (98.9% pureza) y machos (91.4% pureza)
+   - Estrategia competitiva y dominio territorial
+
+### Limitaciones del Estudio
+
+* **Algoritmo de Clustering:** Se utilizó K-Means con codificación *One-Hot* para variables categóricas. Aunque los resultados son biológicamente coherentes, se reconoce que algoritmos como **K-Prototypes** o el uso de distancias de Gower podrían ser teóricamente más robustos para datos mixtos en futuras iteraciones.
+* **Variables Biométricas:** El análisis de tamaño se basa principalmente en el peso corporal. La inclusión de medidas estructurales (como la longitud hocico-cloaca, SVL) permitiría calcular índices de condición corporal y separar "tamaño" de "estado nutricional".
+* **Temporalidad:** Los datos corresponden a un periodo específico (septiembre-noviembre), lo que podría influir en el peso de las hembras (ciclos reproductivos) o la actividad de los machos.
 
 ### 📊 Métricas de Calidad del Clustering
 
-- **Coeficiente de Silueta:** 0.42 (Separación moderada)
-- **Índice Calinski-Harabasz:** 285.2 (Calidad media-alta)
-- **Pureza promedio:** 68.3% (Clusters biológicamente significativos)
+- **Coeficiente de Silueta:** 0.536 (Buena separación)
+- **Índice Calinski-Harabasz:** 218.05 (Alta calidad)
+- **Pureza promedio edad:** 94.6% (Clusters altamente homogéneos)
+- **Pureza promedio sexo:** 69.7% (Diferenciación sexual clara)
+- **Varianza explicada (PCA):** 92.3% con 3 componentes principales
 
 ## 🎨 Visualizaciones Generadas
 
@@ -119,7 +130,10 @@ Análisis estadístico completo de una población de 279 individuos de *Iguana i
 2. **Distribución de pesos** (Histogramas y KDE)
 3. **Dimorfismo sexual** (Boxplots y violines)
 4. **Análisis por edad** (Heatmaps y barras apiladas)
-5. **Clustering** (PCA 2D/3D y mapas de calor)
+5. **Análisis de outliers** (Boxplots con anotaciones)
+6. **Clustering K-Means** (Método del codo, silueta)
+7. **Visualización PCA** (2D y 3D con múltiples vistas)
+8. **Análisis de cargas** (Contribución de variables a componentes principales)
 
 ### Características Visuales
 
@@ -127,7 +141,6 @@ Análisis estadístico completo de una población de 279 individuos de *Iguana i
 - **Estilo:** `whitegrid` de Seaborn
 - **Anotaciones:** Estadísticas integradas en gráficos
 - **Storytelling:** Narrativa científica integrada
-
 
 ## 🚀 Cómo Ejecutar el Proyecto
 
@@ -137,7 +150,68 @@ Análisis estadístico completo de una población de 279 individuos de *Iguana i
 pip install pandas numpy matplotlib seaborn scikit-learn scipy jupyter
 ```
 
+### Ejecutar notebook
 
-# Ejecutar notebook
+```bash
+jupyter notebook especies.ipynb
+```
 
-especies.ipynb
+## 🔬 Conclusiones Biológicas
+
+### Interpretación Ecológica de los Clusters
+
+El análisis de clustering K-Means sugiere la existencia de tres grupos funcionales distintas dentro de la población de iguanas:
+
+#### 🟡 Estrategia de Supervivencia (Cluster 0 - Juveniles)
+
+- **Prioridad:** Crecer y sobrevivir
+- **Riesgo:** Alta vulnerabilidad a depredadores y competencia
+- **Oportunidad:** Flexibilidad y capacidad de adaptación
+
+#### 🟢 Estrategia Reproductiva (Cluster 1 - Hembras Adultas)
+
+- **Prioridad:** Mantener y reproducir
+- **Riesgo:** Competencia por recursos y sitios de anidación
+- **Oportunidad:** Estabilidad y experiencia
+
+#### 🔴 Estrategia de Competencia (Cluster 2 - Machos Dominantes/Subadultos)
+
+- **Prioridad:** Dominar territorios y acceso reproductivo
+- **Riesgo:** Alto costo energético de mantener tamaño corporal
+- **Oportunidad:** Acceso privilegiado a recursos y hembras
+
+### Implicaciones para la Conservación
+
+1. **Protección diferenciada:** Cada cluster requiere estrategias de conservación específicas
+2. **Monitoreo de juveniles:** El bajo porcentaje (8.6%) sugiere alta mortalidad temprana
+3. **Gestión de hábitat urbano:** Mantener conectividad entre territorios para machos dominantes
+4. **Sitios de anidación:** Proteger áreas críticas para hembras reproductoras
+
+### Hallazgos Clave
+
+- Las poblaciones naturales **no son homogéneas** - son sistemas complejos donde múltiples estrategias coexisten
+- El clustering **revela patrones** que las categorías tradicionales (adulto/joven, macho/hembra) no capturan completamente
+- La variabilidad dentro de clusters sugiere **múltiples caminos hacia el éxito evolutivo**
+
+## Trabajo Futuro Sugerido
+
+Para extender este análisis, se recomienda:
+
+1. Implementar la librería `kmodes` para probar el algoritmo  **K-Prototypes** .
+2. Recolectar variables de longitud (SVL) para validación cruzada de los clusters.
+3. Aumentar el tamaño muestral para validar la estabilidad de los grupos extremos.
+
+## 📚 Referencias y Contexto
+
+- **Especie:** _Iguana iguana_ (Linnaeus, 1758)
+- **Estado de conservación:** Preocupación Menor (LC) - IUCN
+- **Localidad:** Área urbana de Cartagena de Indias, Colombia
+- **Período de muestreo:** Septiembre - Noviembre 2025
+
+## 👥 Autor
+
+Análisis realizado como parte del proyecto de monitoreo de fauna urbana en Cartagena de Indias.
+
+## 📄 Licencia
+
+Este proyecto está disponible para fines educativos y de investigación.
